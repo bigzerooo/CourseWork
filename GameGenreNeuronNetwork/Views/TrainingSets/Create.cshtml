@@ -1,0 +1,48 @@
+﻿@model GameGenreNeuronNetwork.Models.ViewModels.TrainingSetCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+<h1>Create</h1>
+
+    <h4>Training set</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            @using (Html.BeginForm("Create", "TrainingSets", FormMethod.Post))
+            {
+                <div class="form-group">
+                    <label asp-for="Genres" class="control-label"></label>
+                    @Html.DropDownList("SelectedGenreId", new SelectList(Model.Genres, "Id", "Name"), new { @class = "form-control" })
+                </div>
+                <ul>
+                    @foreach (var aspect in Model.Aspects)
+                    {
+                        <li>
+                            <input id="aspect@(aspect.Id)"
+                                   type="checkbox"
+                                   name="SelectedIds"
+                                   value="@aspect.Id"
+                                   @(aspect.Value == 1 ? "checked" : "") />
+                            <label for="operator@(aspect.Id)">@aspect.Name</label>
+                        </li>
+
+                    }
+                </ul>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            }
+            </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
