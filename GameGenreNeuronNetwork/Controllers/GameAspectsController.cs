@@ -60,6 +60,20 @@ namespace GameGenreNeuronNetwork.Controllers
             {
                 _context.Add(gameAspect);
                 await _context.SaveChangesAsync();
+
+                var groupIds = _context.GameAspectGroups
+                    .Select(g => g.GroupId)
+                    .Distinct();
+
+                var gameAspectGroups = new List<GameAspectGroup>();
+
+                foreach(var i in groupIds)
+                {
+                    gameAspectGroups.Add(new GameAspectGroup { GroupId = i, GameAspectId = gameAspect.Id, Value = 0 });
+                }
+
+                await _context.AddRangeAsync(gameAspectGroups);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(gameAspect);
